@@ -1,0 +1,88 @@
+TEST-RESULTS
+============
+
+Testiranje je urađeno po metodi crne kutije (black box). To znači da sam gledao samo kako se program ponaša na različite unose, bez gledanja u kod.
+
+------------------------------------
+OSNOVNI TESTOVI
+------------------------------------
+Ulaz        | Očekivano
+------------|----------
+2+3         | 5
+10-4        | 6
+6*7         | 42
+8/2         | 4
+2+3*4       | 14
+10+5*4+3    | 33
+
+------------------------------------
+TESTOVI SA RAZMACIMA I NEGATIVNIM BROJEVIMA
+------------------------------------
+Ulaz          | Očekivano          | Napomena
+--------------|---------------------|-------------------------------
+"  2+3  "     | 5                   | možda problem zbog razmaka
+-3+5          | 2                   | proveriti unarni minus
+2*-3          | -6                  | često ne radi u kalkulatorima
+-3*-2         | 6                   | dvostruki unarni minus
+
+------------------------------------
+POGREŠNI UNOSI (VALIDACIJA)
+------------------------------------
+Ulaz    | Očekivano ponašanje
+--------|-----------------------------
+""      | poruka o grešci
+abc     | greška
+2//3    | greška
+2++3    | greška
+2/0     | greška (ne Infinity)
+10+     | greška
+
+------------------------------------
+PRECIZNOST
+------------------------------------
+Ulaz        | Očekivano
+------------|------------------
+0.1+0.2     | 0.3 (ili blizu)
+1/3         | 0.333...
+
+------------------------------------
+ZAPAŽANJA
+------------------------------------
+- Nema provere praznog stringa (može pasti).
+- Nema obrade razmaka.
+- Nevalidni unos (slova, dva operatora) verovatno pravi problem.
+- Deljenje nulom nije pokriveno.
+- Negativni brojevi možda ne rade u svim situacijama.
+- Koristi se float/double pa može doći do malih odstupanja.
+
+------------------------------------
+JEDINIČNI TEST (primer)
+------------------------------------
+Primer jednostavnog testa (JUnit), koji proverava da li se pravilno računa izraz sa prioritetom:
+
+JUnit 5 primer:
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+public class CalculatorTest {
+
+    @Test
+    void testCalculate() {
+        // Primer: ako se metoda zove Run:
+        // String result = Calculator.Run("2+3*4");
+        // assertEquals("14", result);
+    }
+}
+
+Ovaj test je samo primer, treba prilagoditi metodi iz projekta.
+
+------------------------------------
+ZAKLJUČAK
+------------------------------------
+Kalkulator radi osnovne operacije, ali nema proveru unosa i rukovanje greškama. 
+Potrebno je dodati:
+validaciju izraza
+obradu deljenja nulom
+podršku za razmake
+bolje rukovanje negativnim brojevima
