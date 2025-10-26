@@ -7,7 +7,7 @@ Ovaj izveštaj se odnosi na projekat *calculator-java*.
 | Fajl             | Linije koda (SLOC) |
 |-----------------|---------------------|
 | Calculator.java | 134                 |
-| Start.java      | ~20                 |
+| Start.java      | ~19                 |
 
 Ukupno: oko **154** linija koda (bez praznih linija i komentara).
 
@@ -17,14 +17,18 @@ Format: *fajl – linija – zapažanje*
 
  Calculator.java
 
-- linija 7 – koristi se `float` za rezultat, preciznije je `double`.
-- linije 12–21 – unutrašnja klasa samo za operatore, moglo je jednostavnije sa konstantama.
-- linija 23 – `ToString()` ne prati Java konvenciju (`toString`).
-- linija 30 – `Run()` bi trebalo da bude `run()` (konvencija imenovanja).
-- linija 42 – nema provere praznog stringa pre `charAt(0)`, može izazvati grešku.
-  previše `static` metoda, otežava testiranje i kasniji razvoj.
-  nema validacije neispravnih izraza (slova, dva operatora zaredom, prazno itd.)
-  nema obrade podele nulom.
+Calculator.java – L6 – Globalna statička promenljiva finalResult → nepotrebno globalno stanje, nije thread-safe; rezultat treba vraćati iz metode, ne čuvati u polju.
+
+Calculator.java – L24 & L78 – Imena metoda Run/Calculate počinju velikim slovom → kršenje Java konvencije (treba run, calculate). Nije funkcionalna greška, ali je velika stilska.
+
+Calculator.java – L28–38 – Pretpostavlja da je izraz neprazan i da charAt(0) postoji. Prazan string ili null ruši program (StringIndexOutOfBoundsException). Nedostaje osnovna validacija ulaza (trim, prazno, nedozvoljeni znakovi).
+
+Calculator.java – L64–68 – Rukovanje greškama: vraća se string "ERROR" iz evaluateExpression. Mešaju se podaci i poruke o grešci; umesto toga baciti izuzetak (npr. NumberFormatException) ili koristiti rezultat sa statusom.
+
+Calculator.java – L10–13 & kroz ceo kod – Računanje u float → značajan gubitak preciznosti u kalkulatoru. Za aritmetiku treba bar double ili još bolje BigDecimal (posebno za deljenje/zaokruživanje).
+
+Calculator.java – L74–186 (metoda Calculate)  Veoma duga i rekurzivna metoda sa stalnim mutiranjem listi i remove() pozivima. 
+
 
  Start.java
 
